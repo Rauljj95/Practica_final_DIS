@@ -7,7 +7,10 @@ import com.vaadin.annotations.VaadinServletConfiguration;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinServlet;
 import com.vaadin.ui.Button;
+import com.vaadin.ui.FormLayout;
+import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
+import com.vaadin.ui.Panel;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
@@ -24,20 +27,36 @@ public class MyUI extends UI {
 
     @Override
     protected void init(VaadinRequest vaadinRequest) {
-        final VerticalLayout layout = new VerticalLayout();
         
-        final TextField name = new TextField();
-        name.setCaption("Type your name here:");
-
-        Button button = new Button("Click Me");
-        button.addClickListener(e -> {
-            layout.addComponent(new Label("Thanks " + name.getValue() 
-                    + ", it works!"));
-        });
-        
-        layout.addComponents(name, button);
-        
-        setContent(layout);
+    	Productos productos = new Productos();
+    	VerticalLayout layout = new VerticalLayout();
+	    	Panel panel = new Panel("Añadir producto");
+	    		
+	    		FormLayout formulario_producto = new FormLayout();
+		    	
+			        final TextField nombre = new TextField();
+			        nombre.setCaption("Nombre del producto:");
+			
+			        final TextField marca = new TextField();
+			        marca.setCaption("Marca:");
+			        
+			        final TextField ean = new TextField();
+			        ean.setCaption("EAN13:");
+			        Button button = new Button("Click Me!!");
+			        button.addClickListener(e -> {
+			            formulario_producto.addComponent(new Label("Producto " + nombre.getValue() 
+			                    + ", añadido!"));
+			        });
+		        
+			        formulario_producto.addComponents(nombre, marca, ean, button);
+			        formulario_producto.setSizeUndefined(); // Shrink to fit
+			        formulario_producto.setMargin(true);
+	    	panel.setContent(formulario_producto);
+	    	
+    	
+    
+    	layout.addComponents(panel);
+    	setContent(layout);
     }
 
     @WebServlet(urlPatterns = "/*", name = "MyUIServlet", asyncSupported = true)
