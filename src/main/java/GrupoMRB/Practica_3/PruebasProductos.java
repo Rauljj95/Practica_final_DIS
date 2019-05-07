@@ -140,6 +140,7 @@ class PruebasProductos {
         Productos.ToJson("prueba.json");
         BufferedReader br = new BufferedReader(new FileReader("prueba.json"));  
         assertNotEquals(br.readLine(), null);
+        br.close();
            
 	}
 }
