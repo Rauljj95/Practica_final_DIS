@@ -38,12 +38,11 @@ public class MyUI extends UI {
         
     	Productos productos = new Productos();
     	
-    	
+    	productos.CrearElemento(new Producto("hola", "adios", "123"));
     	Grid<Producto> grid_productos = new Grid<>(Producto.class);
+    	
         grid_productos.setItems(productos.getProductos());
-        grid_productos.addColumn(
-                p -> new ThemeResource("ean/" + p.getNombre() + ".png"),
-                        new ImageRenderer<Producto>()).setCaption("Image");        grid_productos.setColumns("nombre", "marca", "ean13", "Imagen");
+        grid_productos.setColumns("Nombre", "Marca", "EAN13");
     	
     	VerticalLayout layout = new VerticalLayout();
 	    	Panel panel = new Panel("Añadir producto");
@@ -64,10 +63,11 @@ public class MyUI extends UI {
 			            Path path = FileSystems.getDefault().getPath("src/main/webapp/VAADIN/themes/mytheme/ean" + producto.getNombre() + ".png");
 			            producto.GuardarImagenCodigoBarras(path);
 			            productos.CrearElemento(producto);
-			            grid_productos.setItems(productos.getProductos());
+			            //grid_productos.setItems(productos.getProductos());
+			            			        
 			        });
 		        
-;			        formulario_producto.addComponents(nombre, marca, ean, button);
+			        formulario_producto.addComponents(nombre, marca, ean, button);
 			        formulario_producto.setSizeUndefined(); // Shrink to fit
 			        formulario_producto.setMargin(true);
 			        panel.setContent(formulario_producto);
@@ -77,11 +77,12 @@ public class MyUI extends UI {
 			  
 			  VerticalLayout layout_productos = new VerticalLayout();
 			  
-			  layout_productos.addComponents(grid_productos);
+			  
+			    layout_productos.addComponents();
 		        layout_productos.setSizeUndefined(); // Shrink to fit
 		        layout_productos.setMargin(true);
 		        
-		        panel.setContent(layout_productos);
+		        panel2.setContent(layout_productos);
     
     	layout.addComponents(panel, panel2);
     	setContent(layout);
