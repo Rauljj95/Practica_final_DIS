@@ -1,5 +1,8 @@
 package GrupoMRB.Practica_3;
 
+import java.nio.file.FileSystems;
+import java.nio.file.Path;
+
 import javax.servlet.annotation.WebServlet;
 
 import com.vaadin.annotations.Theme;
@@ -8,12 +11,15 @@ import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinServlet;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.FormLayout;
+import com.vaadin.ui.Grid;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Panel;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
+
+import ufv.dis.finalej2.RJJ.Tweet;
 
 /**
  * This UI is the application entry point. A UI may either represent a browser window 
@@ -29,6 +35,13 @@ public class MyUI extends UI {
     protected void init(VaadinRequest vaadinRequest) {
         
     	Productos productos = new Productos();
+    	
+    	
+    	Grid<Producto> grid_productos = new Grid<>(Producto.class);
+        grid_productos.setItems(productos.getProductos());
+        
+        grid_productos.setColumns("nombre", "marca", "ean13");
+    	
     	VerticalLayout layout = new VerticalLayout();
 	    	Panel panel = new Panel("Añadir producto");
 	    		
@@ -44,15 +57,19 @@ public class MyUI extends UI {
 			        ean.setCaption("EAN13:");
 			        Button button = new Button("Click Me!!");
 			        button.addClickListener(e -> {
-			            formulario_producto.addComponent(new Label("Producto " + nombre.getValue() 
-			                    + ", añadido!"));
+			            Producto producto = new Producto(nombre.getValue(), marca.getValue(), ean.getValue());
+			            Path path = FileSystems.getDefault().getPath("ean/" + producto.getNombre() + ".png");
+			            producto.GuardarImagenCodigoBarras(path);
+			            productos.CrearElemento(producto);
+			            grid_productos.setItems(productos.getProductos());
 			        });
 		        
-			        formulario_producto.addComponents(nombre, marca, ean, button);
+;			        formulario_producto.addComponents(nombre, marca, ean, button);
 			        formulario_producto.setSizeUndefined(); // Shrink to fit
 			        formulario_producto.setMargin(true);
-	    	panel.setContent(formulario_producto);
-	    	
+			        panel.setContent(formulario_producto);
+			        
+			        
     	
     
     	layout.addComponents(panel);
