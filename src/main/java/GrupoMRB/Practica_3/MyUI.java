@@ -7,6 +7,7 @@ import javax.servlet.annotation.WebServlet;
 
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.VaadinServletConfiguration;
+import com.vaadin.server.Resource;
 import com.vaadin.server.ThemeResource;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinServlet;
@@ -33,17 +34,23 @@ import com.vaadin.ui.renderers.ImageRenderer;
 @Theme("mytheme")
 public class MyUI extends UI {
 
-    @Override
+    private Object message;
+
+	@Override
     protected void init(VaadinRequest vaadinRequest) {
         
     	Productos productos = new Productos();
     	
-    	productos.CrearElemento(new Producto("hola", "adios", "123"));
+    	Producto product = new Producto("Playstation", "Sony", "978020137962");
+        Path pat = FileSystems.getDefault().getPath("src/main/webapp/VAADIN/themes/mytheme/ean/" + product.getNombre() + ".png");
+        product.GuardarImagenCodigoBarras(pat);
+        productos.CrearElemento(product);
     	Grid<Producto> grid_productos = new Grid<>(Producto.class);
     	
         grid_productos.setItems(productos.getProductos());
-        grid_productos.setColumns("Nombre", "Marca", "EAN13");
-    	
+        //grid_productos.setColumns("nombre", "marca", "ean13");
+    	grid_productos.setSelectionMode(Grid.SelectionMode.NONE);
+
     	VerticalLayout layout = new VerticalLayout();
 	    	Panel panel = new Panel("Añadir producto");
 	    		
@@ -57,13 +64,13 @@ public class MyUI extends UI {
 			        
 			        final TextField ean = new TextField();
 			        ean.setCaption("EAN13:");
-			        Button button = new Button("Click Me!!");
+			        Button button = new Button("añadir producto");
 			        button.addClickListener(e -> {
 			            Producto producto = new Producto(nombre.getValue(), marca.getValue(), ean.getValue());
-			            Path path = FileSystems.getDefault().getPath("src/main/webapp/VAADIN/themes/mytheme/ean" + producto.getNombre() + ".png");
+			            Path path = FileSystems.getDefault().getPath("src/main/webapp/VAADIN/themes/mytheme/ean/" + producto.getNombre() + ".png");
 			            producto.GuardarImagenCodigoBarras(path);
 			            productos.CrearElemento(producto);
-			            //grid_productos.setItems(productos.getProductos());
+			            grid_productos.setItems(productos.getProductos());
 			            			        
 			        });
 		        
@@ -75,10 +82,23 @@ public class MyUI extends UI {
 			        
 			  Panel panel2 = new Panel("mostrar productos");
 			  
-			  VerticalLayout layout_productos = new VerticalLayout();
+			  HorizontalLayout layout_productos = new HorizontalLayout();
+			  //final Image image = new Image();
+			  VerticalLayout layout_imagen = new VerticalLayout();
+			  //grid_productos.getEditor().addOpenListener(listener);
+		    	grid_productos.addItemClickListener(e-> {
+		    		
+		        	Resource res = new ThemeResource("ean/" + e.getItem().getNombre() + ".png");
+		        	Image image = new Image(e.getItem().getNombre(),res);
+		        	layout_productos.removeComponent(layout_imagen);
+		        	image.setWidth(300, Unit.PIXELS);
+		        	image.setHeight(150, Unit.PIXELS);
+		        	layout_imagen.addComponent(image);
+		        	layout_productos.addComponents(layout_imagen);
+		        	});			 
 			  
-			  
-			    layout_productos.addComponents();
+			    layout_productos.addComponents(grid_productos);
+			    
 		        layout_productos.setSizeUndefined(); // Shrink to fit
 		        layout_productos.setMargin(true);
 		        
@@ -87,6 +107,8 @@ public class MyUI extends UI {
     	layout.addComponents(panel, panel2);
     	setContent(layout);
     }
+	
+	
 
     @WebServlet(urlPatterns = "/*", name = "MyUIServlet", asyncSupported = true)
     @VaadinServletConfiguration(ui = MyUI.class, productionMode = false)

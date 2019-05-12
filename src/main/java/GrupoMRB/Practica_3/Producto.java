@@ -18,43 +18,43 @@ import com.google.gson.Gson;
 
 public class Producto {
 
-	private String Nombre;
-	private String Marca;
-	private String EAN13;
+	private String nombre;
+	private String marca;
+	private String ean13;
 	//Con el objetivo de facilitar la implementación de CRUD, creamos un ID del producto. 
 	@SuppressWarnings("unused")
 	private int ID;
 	
 
-	public Producto(String nombre, String marca, String eAN13) {
+	public Producto(String Nombre, String Marca, String eAN13) {
 		super();
-		Nombre = nombre;
-		Marca = marca;
-		EAN13 = eAN13;
+		nombre = Nombre;
+		marca = Marca;
+		ean13 = eAN13;
 	}
 	
 	public String getNombre() {
-		return Nombre;
+		return nombre;
 	}
-	public void setNombre(String nombre) {
-		Nombre = nombre;
+	public void setNombre(String Nombre) {
+		nombre = Nombre;
 	}
 	public String getMarca() {
-		return Marca;
+		return marca;
 	}
-	public void setMarca(String marca) {
-		Marca = marca;
+	public void setMarca(String Marca) {
+		marca = Marca;
 	}
 	public String getEAN13() {
-		return EAN13;
+		return ean13;
 	}
 	public void setEAN13(String eAN13) {
-		EAN13 = eAN13;
+		ean13 = eAN13;
 	}
 	
 	public String MostrarDatos()
 	{
-		String datos = "Nombre: " + this.Nombre + " Marca: " + this.Marca + " EAN13: " + EAN13.toString();
+		String datos = "Nombre: " + this.nombre + " Marca: " + this.marca + " EAN13: " + ean13.toString();
 		return datos;
 	}
 	
@@ -70,7 +70,7 @@ public class Producto {
 		
 		EAN13Writer ew1 = new EAN13Writer();
 		try {
-			MatrixToImageWriter.writeToPath(ew1.encode(EAN13, BarcodeFormat.EAN_13, 1920, 1080), "png", ruta);
+			MatrixToImageWriter.writeToPath(ew1.encode(ean13, BarcodeFormat.EAN_13, 1920, 1080), "png", ruta);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -80,5 +80,7 @@ public class Producto {
 		}
         
 	}
+	
+	
 	
 }
